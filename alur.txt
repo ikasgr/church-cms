@@ -1,0 +1,15 @@
+Buat aplikasi CMS CHURCH FLOBAMORA yang modular terdiri dari
+
+1. Dashboard & Laporan : Statistik jumlah jemaat, keuangan, kegiatan, kehadiran, dll.
+2. Modul Lembaga : Sambutan Ketua Majelis, Data Majelis, Data Profil (tab Profil gereja, Sejarah, Visi Misi, Struktur Orgnisasi, )
+3. Modul Jemaat : Data anggota, baptisan, sidi, pernikahan, keanggotaan keluarga, Pencarian dan filter berdasarkan nama, wilayah, atau status.
+4. Modul Ibadah & Kegiatan : Jadwal ibadah mingguan, perayaan khusus, dan kegiatan kategorial (remaja, pemuda, lansia, paduan suara, dll), Pendaftaran kegiatan / kehadiran online.
+5. Modul Keuangan Gereja : Penerimaan (persembahan, kolekte, donasi), Pengeluaran (operasional, pelayanan, sosial), Laporan keuangan dan grafik transparansi.
+6. Modul Berita & Warta Jemaat : Artikel, pengumuman, renungan, agenda.
+7. Modul Galeri : manajemen Data Foto dan Data Video.
+8. Modul Interaksi : Survei, Jajak Pendapat, Masukan dan Saran, Buku Tamu
+9. Modul Pendaftaran online : Pendaftaran Baptis, Sidi, Nikah 
+9. Modul Konten : Halaman Statis, Banner, Infografis, Link Terkait, Iklan, Tanya Jawab
+10. Modul Konfigurasi : Pengaturan, User Manajemen, Pengaturan Menu, Pengaturan Modul, Pengaturan Tema
+
+Backend	CodeIgniter 4, Frontend	HTML+Tailwind CSS + Alpine.js
