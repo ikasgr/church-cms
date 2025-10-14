@@ -66,17 +66,6 @@
                                placeholder="Masukkan password">
                     </div>
                     
-                    <!-- Remember Me -->
-                    <div class="mb-6 flex items-center">
-                        <input type="checkbox" 
-                               id="remember" 
-                               name="remember"
-                               class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
-                        <label for="remember" class="ml-2 text-sm text-gray-700">
-                            Ingat saya
-                        </label>
-                    </div>
-                    
                     <!-- Submit Button -->
                     <button type="submit" 
                             class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg transition duration-200 flex items-center justify-center">

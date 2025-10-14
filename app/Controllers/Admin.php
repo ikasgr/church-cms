@@ -128,10 +128,25 @@ class Admin extends BaseController
             $username = $this->request->getPost('username');
             $password = $this->request->getPost('password');
 
+            $identifier = strtolower(trim($username)) . '|' . $this->request->getIPAddress();
+            $cache = cache();
+            $attemptKey = 'login_attempts_' . md5($identifier);
+            $lockKey = 'login_lock_' . md5($identifier);
+            $maxAttempts = 5;
+            $lockDuration = 15 * 60; // 15 minutes
+
+            if ($cache->get($lockKey)) {
+                session()->setFlashdata('error', 'Terlalu banyak percobaan login. Silakan coba lagi dalam 15 menit.');
+                log_message('warning', 'Login diblokir untuk {identifier}', ['identifier' => $identifier]);
+                return view('admin/login', $data);
+            }
+
             $user = $this->userModel->where('username', $username)->first();
 
             if ($user && password_verify($password, $user['password'])) {
                 if ($user['is_active']) {
+                    session()->regenerate(true);
+
                     session()->set([
                         'isLoggedIn' => true,
                         'userId' => $user['id'],
@@ -140,14 +155,40 @@ class Admin extends BaseController
                         'role' => $user['role'],
                     ]);
 
+                    $cache->delete($attemptKey);
+                    $cache->delete($lockKey);
+
                     $this->userModel->updateLastLogin($user['id']);
+
+                    log_message('info', 'Login berhasil untuk {username} dari IP {ip}', [
+                        'username' => $username,
+                        'ip' => $this->request->getIPAddress()
+                    ]);
 
                     return redirect()->to('/admin');
                 } else {
                     session()->setFlashdata('error', 'Akun Anda tidak aktif');
+                    log_message('warning', 'Login gagal (akun nonaktif) untuk {username} dari IP {ip}', [
+                        'username' => $username,
+                        'ip' => $this->request->getIPAddress()
+                    ]);
                 }
             } else {
                 session()->setFlashdata('error', 'Username atau password salah');
+                log_message('warning', 'Login gagal untuk {username} dari IP {ip}', [
+                    'username' => $username,
+                    'ip' => $this->request->getIPAddress()
+                ]);
+            }
+
+            $attempts = (int) ($cache->get($attemptKey) ?? 0);
+            $attempts++;
+
+            if ($attempts >= $maxAttempts) {
+                $cache->delete($attemptKey);
+                $cache->save($lockKey, true, $lockDuration);
+            } else {
+                $cache->save($attemptKey, $attempts, $lockDuration);
             }
         }
 

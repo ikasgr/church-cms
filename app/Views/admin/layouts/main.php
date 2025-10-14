@@ -230,7 +230,17 @@
             
             <!-- Page Title -->
             <div class="mb-6">
-                <h1 class="text-2xl font-bold text-gray-800"><?= $title ?? 'Dashboard' ?></h1>
+                <div class="flex items-center justify-between gap-3 mb-4">
+                    <h1 class="text-2xl font-bold text-gray-800"><?= $title ?? 'Dashboard' ?></h1>
+                    <div class="flex items-center gap-2">
+                        <a href="<?= base_url('admin') ?>" class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+                            <i class="fas fa-home mr-2"></i>Home
+                        </a>
+                        <button type="button" onclick="history.back()" class="inline-flex items-center px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition">
+                            <i class="fas fa-arrow-left mr-2"></i>Kembali
+                        </button>
+                    </div>
+                </div>
                 <?php if (isset($breadcrumb)): ?>
                     <nav class="text-sm text-gray-600 mt-2">
                         <?php foreach ($breadcrumb as $item): ?>

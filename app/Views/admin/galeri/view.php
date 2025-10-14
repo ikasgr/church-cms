@@ -200,7 +200,7 @@
                     <label class="text-sm text-gray-600 block mb-1">Urutan Tampil</label>
                     <div class="text-gray-800 font-medium">
                         <i class="fas fa-sort-numeric-down text-gray-600 mr-1"></i>
-                        <?= $gallery['order_position'] ?>
+                        <?= isset($gallery['order_position']) ? $gallery['order_position'] : '-' ?>
                     </div>
                 </div>
                 
