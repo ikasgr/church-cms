@@ -7,11 +7,54 @@
         <h2 class="text-xl font-semibold text-gray-800">Pendaftaran Online</h2>
         <p class="text-sm text-gray-600 mt-1">Kelola pendaftaran baptis, sidi, dan nikah</p>
     </div>
-    <a href="<?= base_url('admin/pendaftaran/export') ?>" 
-       class="mt-4 md:mt-0 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition">
-        <i class="fas fa-file-excel mr-2"></i>Export
-    </a>
+    <div class="flex gap-2 mt-4 md:mt-0">
+        <div class="relative inline-block text-left">
+            <button type="button" onclick="toggleDropdown()" 
+                    class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+                <i class="fas fa-plus mr-2"></i>Tambah Pendaftaran
+                <i class="fas fa-chevron-down ml-2"></i>
+            </button>
+            <div id="dropdownMenu" class="hidden absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-10">
+                <div class="py-1">
+                    <a href="<?= base_url('admin/pendaftaran/baptis/create') ?>" 
+                       class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                        <i class="fas fa-water text-blue-600 mr-2"></i>Baptis
+                    </a>
+                    <a href="<?= base_url('admin/pendaftaran/sidi/create') ?>" 
+                       class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                        <i class="fas fa-cross text-purple-600 mr-2"></i>Sidi
+                    </a>
+                    <a href="<?= base_url('admin/pendaftaran/nikah/create') ?>" 
+                       class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                        <i class="fas fa-rings-wedding text-pink-600 mr-2"></i>Nikah
+                    </a>
+                </div>
+            </div>
+        </div>
+        <a href="<?= base_url('admin/pendaftaran/export') ?>" 
+           class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition">
+            <i class="fas fa-file-excel mr-2"></i>Export
+        </a>
+    </div>
 </div>
+
+<script>
+function toggleDropdown() {
+    document.getElementById('dropdownMenu').classList.toggle('hidden');
+}
+// Close dropdown when clicking outside
+window.onclick = function(event) {
+    if (!event.target.matches('button')) {
+        var dropdowns = document.getElementsByClassName("absolute");
+        for (var i = 0; i < dropdowns.length; i++) {
+            var openDropdown = dropdowns[i];
+            if (!openDropdown.classList.contains('hidden')) {
+                openDropdown.classList.add('hidden');
+            }
+        }
+    }
+}
+</script>
 
 <!-- Filter -->
 <div class="bg-white rounded-lg shadow-md p-4 mb-6">

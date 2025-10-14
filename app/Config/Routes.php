@@ -187,6 +187,20 @@ $routes->group('admin', function($routes) {
     // Pendaftaran Module
     $routes->group('pendaftaran', function($routes) {
         $routes->get('/', 'AdminPendaftaran::index');
+        
+        // Baptis
+        $routes->get('baptis/create', 'AdminPendaftaran::baptisCreate');
+        $routes->post('baptis/create', 'AdminPendaftaran::baptisCreate');
+        
+        // Sidi
+        $routes->get('sidi/create', 'AdminPendaftaran::sidiCreate');
+        $routes->post('sidi/create', 'AdminPendaftaran::sidiCreate');
+        
+        // Nikah
+        $routes->get('nikah/create', 'AdminPendaftaran::nikahCreate');
+        $routes->post('nikah/create', 'AdminPendaftaran::nikahCreate');
+        
+        // General
         $routes->get('view/(:num)', 'AdminPendaftaran::view/$1');
         $routes->get('approve/(:num)', 'AdminPendaftaran::approve/$1');
         $routes->post('approve/(:num)', 'AdminPendaftaran::approve/$1');
@@ -255,5 +269,46 @@ $routes->group('admin', function($routes) {
         $routes->get('modules', 'AdminKonfigurasi::modules');
         $routes->get('theme', 'AdminKonfigurasi::theme');
         $routes->post('theme', 'AdminKonfigurasi::theme');
+    });
+    
+    // UMKM Module
+    $routes->group('umkm', function($routes) {
+        $routes->get('/', 'AdminUmkm::index');
+        
+        // Sellers
+        $routes->get('sellers', 'AdminUmkm::sellers');
+        $routes->get('sellers/create', 'AdminUmkm::sellerCreate');
+        $routes->post('sellers/create', 'AdminUmkm::sellerCreate');
+        $routes->get('sellers/view/(:num)', 'AdminUmkm::sellerView/$1');
+        $routes->get('sellers/edit/(:num)', 'AdminUmkm::sellerEdit/$1');
+        $routes->post('sellers/edit/(:num)', 'AdminUmkm::sellerEdit/$1');
+        $routes->get('sellers/delete/(:num)', 'AdminUmkm::sellerDelete/$1');
+        $routes->get('sellers/approve/(:num)', 'AdminUmkm::sellerApprove/$1');
+        $routes->get('sellers/suspend/(:num)', 'AdminUmkm::sellerSuspend/$1');
+        
+        // Products
+        $routes->get('products', 'AdminUmkm::products');
+        $routes->get('products/create', 'AdminUmkm::productCreate');
+        $routes->post('products/create', 'AdminUmkm::productCreate');
+        $routes->get('products/edit/(:num)', 'AdminUmkm::productEdit/$1');
+        $routes->post('products/edit/(:num)', 'AdminUmkm::productEdit/$1');
+        $routes->get('products/delete/(:num)', 'AdminUmkm::productDelete/$1');
+        $routes->get('products/toggle/(:num)', 'AdminUmkm::productToggle/$1');
+        
+        // Orders
+        $routes->get('orders', 'AdminUmkm::orders');
+        $routes->get('orders/view/(:num)', 'AdminUmkm::orderView/$1');
+        $routes->post('orders/update-status/(:num)', 'AdminUmkm::orderUpdateStatus/$1');
+        
+        // Categories
+        $routes->get('categories', 'AdminUmkm::categories');
+        $routes->get('categories/create', 'AdminUmkm::categoryCreate');
+        $routes->post('categories/create', 'AdminUmkm::categoryCreate');
+        $routes->get('categories/edit/(:num)', 'AdminUmkm::categoryEdit/$1');
+        $routes->post('categories/edit/(:num)', 'AdminUmkm::categoryEdit/$1');
+        $routes->get('categories/delete/(:num)', 'AdminUmkm::categoryDelete/$1');
+        
+        // Reports
+        $routes->get('reports', 'AdminUmkm::reports');
     });
 });

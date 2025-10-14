@@ -1,0 +1,390 @@
+/* Custom CSS untuk class Tailwind yang mungkin tidak ter-generate */
+/* CRITICAL: Use !important to prevent Tailwind runtime override */
+
+/* ============================================
+   BACKGROUND COLORS - RED
+   ============================================ */
+.bg-red-50 {
+    background-color: rgb(254 242 242) !important;
+}
+
+.bg-red-100 {
+    background-color: rgb(254 226 226) !important;
+}
+
+.bg-red-500 {
+    background-color: rgb(239 68 68) !important;
+}
+
+.bg-red-600 {
+    background-color: rgb(220 38 38) !important;
+}
+
+.bg-red-800 {
+    background-color: rgb(153 27 27) !important;
+}
+
+/* ============================================
+   BACKGROUND COLORS - YELLOW
+   ============================================ */
+.bg-yellow-50 {
+    background-color: rgb(254 252 232) !important;
+}
+
+.bg-yellow-100 {
+    background-color: rgb(254 249 195) !important;
+}
+
+.bg-yellow-500 {
+    background-color: rgb(234 179 8) !important;
+}
+
+.bg-yellow-600 {
+    background-color: rgb(202 138 4) !important;
+}
+
+/* ============================================
+   BACKGROUND COLORS - GREEN
+   ============================================ */
+.bg-green-50 {
+    background-color: rgb(240 253 244) !important;
+}
+
+.bg-green-100 {
+    background-color: rgb(220 252 231) !important;
+}
+
+.bg-green-500 {
+    background-color: rgb(34 197 94) !important;
+}
+
+.bg-green-600 {
+    background-color: rgb(22 163 74) !important;
+}
+
+.bg-green-800 {
+    background-color: rgb(22 101 52) !important;
+}
+
+/* ============================================
+   BACKGROUND COLORS - BLUE
+   ============================================ */
+.bg-blue-50 {
+    background-color: rgb(239 246 255) !important;
+}
+
+.bg-blue-100 {
+    background-color: rgb(219 234 254) !important;
+}
+
+.bg-blue-500 {
+    background-color: rgb(59 130 246) !important;
+}
+
+.bg-blue-600 {
+    background-color: rgb(37 99 235) !important;
+}
+
+.bg-blue-700 {
+    background-color: rgb(29 78 216) !important;
+}
+
+.bg-blue-800 {
+    background-color: rgb(30 64 175) !important;
+}
+
+/* ============================================
+   TEXT COLORS - RED
+   ============================================ */
+.text-red-500 {
+    color: rgb(239 68 68) !important;
+}
+
+.text-red-600 {
+    color: rgb(220 38 38) !important;
+}
+
+.text-red-700 {
+    color: rgb(185 28 28) !important;
+}
+
+.text-red-800 {
+    color: rgb(153 27 27) !important;
+}
+
+/* ============================================
+   TEXT COLORS - YELLOW
+   ============================================ */
+.text-yellow-600 {
+    color: rgb(202 138 4) !important;
+}
+
+.text-yellow-700 {
+    color: rgb(161 98 7) !important;
+}
+
+.text-yellow-800 {
+    color: rgb(133 77 14) !important;
+}
+
+/* ============================================
+   TEXT COLORS - GREEN
+   ============================================ */
+.text-green-600 {
+    color: rgb(22 163 74) !important;
+}
+
+.text-green-700 {
+    color: rgb(21 128 61) !important;
+}
+
+.text-green-800 {
+    color: rgb(22 101 52) !important;
+}
+
+/* ============================================
+   TEXT COLORS - BLUE
+   ============================================ */
+.text-blue-600 {
+    color: rgb(37 99 235) !important;
+}
+
+.text-blue-700 {
+    color: rgb(29 78 216) !important;
+}
+
+.text-blue-800 {
+    color: rgb(30 64 175) !important;
+}
+
+/* ============================================
+   BORDER COLORS - RED
+   ============================================ */
+.border-red-500 {
+    border-color: rgb(239 68 68) !important;
+}
+
+.border-red-600 {
+    border-color: rgb(220 38 38) !important;
+}
+
+/* ============================================
+   BORDER COLORS - YELLOW
+   ============================================ */
+.border-yellow-500 {
+    border-color: rgb(234 179 8) !important;
+}
+
+.border-yellow-600 {
+    border-color: rgb(202 138 4) !important;
+}
+
+/* ============================================
+   BORDER COLORS - GREEN
+   ============================================ */
+.border-green-500 {
+    border-color: rgb(34 197 94) !important;
+}
+
+.border-green-600 {
+    border-color: rgb(22 163 74) !important;
+}
+
+/* ============================================
+   BORDER COLORS - BLUE
+   ============================================ */
+.border-blue-500 {
+    border-color: rgb(59 130 246) !important;
+}
+
+.border-blue-600 {
+    border-color: rgb(37 99 235) !important;
+}
+
+/* ============================================
+   HOVER STATES
+   ============================================ */
+.hover\:bg-red-100:hover {
+    background-color: rgb(254 226 226) !important;
+}
+
+.hover\:bg-red-600:hover {
+    background-color: rgb(220 38 38) !important;
+}
+
+.hover\:bg-green-100:hover {
+    background-color: rgb(220 252 231) !important;
+}
+
+.hover\:bg-blue-100:hover {
+    background-color: rgb(219 234 254) !important;
+}
+
+/* ============================================
+   GRADIENT BACKGROUNDS
+   ============================================ */
+.from-red-50 {
+    --tw-gradient-from: rgb(254 242 242) !important;
+    --tw-gradient-to: rgb(254 242 242 / 0) !important;
+    --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to) !important;
+}
+
+.to-red-100 {
+    --tw-gradient-to: rgb(254 226 226) !important;
+}
+
+.from-yellow-50 {
+    --tw-gradient-from: rgb(254 252 232) !important;
+    --tw-gradient-to: rgb(254 252 232 / 0) !important;
+    --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to) !important;
+}
+
+.to-yellow-100 {
+    --tw-gradient-to: rgb(254 249 195) !important;
+}
+
+.from-green-50 {
+    --tw-gradient-from: rgb(240 253 244) !important;
+    --tw-gradient-to: rgb(240 253 244 / 0) !important;
+    --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to) !important;
+}
+
+.to-green-100 {
+    --tw-gradient-to: rgb(220 252 231) !important;
+}
+
+/* ============================================
+   BORDER WIDTH
+   ============================================ */
+.border-l-4 {
+    border-left-width: 4px !important;
+}
+
+.border-l-8 {
+    border-left-width: 8px !important;
+}
+
+.border-t-4 {
+    border-top-width: 4px !important;
+}
+
+/* ============================================
+   ROUNDED CORNERS
+   ============================================ */
+.rounded-r-lg {
+    border-top-right-radius: 0.5rem !important;
+    border-bottom-right-radius: 0.5rem !important;
+}
+
+.rounded-full {
+    border-radius: 9999px !important;
+}
+
+.rounded-xl {
+    border-radius: 0.75rem !important;
+}
+
+.rounded-2xl {
+    border-radius: 1rem !important;
+}
+
+/* ============================================
+   BADGE HELPER CLASSES
+   ============================================ */
+.badge {
+    display: inline-block !important;
+    padding: 0.25rem 0.75rem !important;
+    border-radius: 9999px !important;
+    font-size: 0.75rem !important;
+    font-weight: 600 !important;
+}
+
+.badge-red {
+    background-color: rgb(254 226 226) !important;
+    color: rgb(153 27 27) !important;
+}
+
+.badge-yellow {
+    background-color: rgb(254 249 195) !important;
+    color: rgb(133 77 14) !important;
+}
+
+.badge-green {
+    background-color: rgb(220 252 231) !important;
+    color: rgb(22 101 52) !important;
+}
+
+.badge-blue {
+    background-color: rgb(219 234 254) !important;
+    color: rgb(30 64 175) !important;
+}
+
+/* ============================================
+   ALERT HELPER CLASSES
+   ============================================ */
+.alert {
+    padding: 1rem !important;
+    border-radius: 0.5rem !important;
+    margin-bottom: 1rem !important;
+}
+
+.alert-red {
+    background-color: rgb(254 226 226) !important;
+    border-left: 4px solid rgb(239 68 68) !important;
+    color: rgb(185 28 28) !important;
+}
+
+.alert-yellow {
+    background-color: rgb(254 249 195) !important;
+    border-left: 4px solid rgb(234 179 8) !important;
+    color: rgb(161 98 7) !important;
+}
+
+.alert-green {
+    background-color: rgb(220 252 231) !important;
+    border-left: 4px solid rgb(34 197 94) !important;
+    color: rgb(21 128 61) !important;
+}
+
+.alert-blue {
+    background-color: rgb(219 234 254) !important;
+    border-left: 4px solid rgb(59 130 246) !important;
+    color: rgb(29 78 216) !important;
+}
+
+/* ============================================
+   GRADIENT DIRECTION
+   ============================================ */
+.bg-gradient-to-br {
+    background-image: linear-gradient(to bottom right, var(--tw-gradient-stops)) !important;
+}
+
+.bg-gradient-to-r {
+    background-image: linear-gradient(to right, var(--tw-gradient-stops)) !important;
+}
+
+.bg-gradient-to-l {
+    background-image: linear-gradient(to left, var(--tw-gradient-stops)) !important;
+}
+
+.bg-gradient-to-t {
+    background-image: linear-gradient(to top, var(--tw-gradient-stops)) !important;
+}
+
+.bg-gradient-to-b {
+    background-image: linear-gradient(to bottom, var(--tw-gradient-stops)) !important;
+}
+
+/* ============================================
+   PREVENT FOUC (Flash of Unstyled Content)
+   ============================================ */
+[class*="bg-red-"],
+[class*="bg-yellow-"],
+[class*="bg-green-"],
+[class*="bg-blue-"],
+[class*="text-red-"],
+[class*="text-yellow-"],
+[class*="text-green-"],
+[class*="text-blue-"] {
+    transition: none !important;
+}

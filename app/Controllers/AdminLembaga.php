@@ -217,7 +217,7 @@ class AdminLembaga extends BaseController
             $rules = [
                 'title' => 'required|min_length[3]|max_length[255]',
                 'content' => 'required',
-                'author' => 'required|max_length[255]',
+                'author_name' => 'required|max_length[255]',
                 'author_position' => 'required|max_length[100]',
             ];
 
@@ -225,7 +225,7 @@ class AdminLembaga extends BaseController
                 $insertData = [
                     'title' => $this->request->getPost('title'),
                     'content' => $this->request->getPost('content'),
-                    'author' => $this->request->getPost('author'),
+                    'author_name' => $this->request->getPost('author_name'),
                     'author_position' => $this->request->getPost('author_position'),
                     'is_active' => $this->request->getPost('is_active') ? 1 : 0,
                 ];
@@ -265,15 +265,15 @@ class AdminLembaga extends BaseController
             $rules = [
                 'title' => 'required|min_length[3]|max_length[255]',
                 'content' => 'required',
-                'author' => $this->request->getPost('author'),
-                'author_position' => $this->request->getPost('author_position'),
+                'author_name' => 'required|max_length[255]',
+                'author_position' => 'required|max_length[100]',
             ];
 
             if ($this->validate($rules)) {
                 $updateData = [
                     'title' => $this->request->getPost('title'),
                     'content' => $this->request->getPost('content'),
-                    'author' => $this->request->getPost('author'),
+                    'author_name' => $this->request->getPost('author_name'),
                     'author_position' => $this->request->getPost('author_position'),
                     'is_active' => $this->request->getPost('is_active') ? 1 : 0,
                 ];
