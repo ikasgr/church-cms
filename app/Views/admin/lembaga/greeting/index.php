@@ -13,14 +13,8 @@
     </a>
 </div>
 
-<?php if (session()->getFlashdata('success')): ?>
-    <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg mb-6">
-        <i class="fas fa-check-circle mr-2"></i><?= session()->getFlashdata('success') ?>
-    </div>
-<?php endif; ?>
-
 <?php if (empty($greetings)): ?>
-    <div class="bg-white rounded-lg shadow-md p-12 text-center">
+    <div class="bg-white rounded-lg shadow-md overflow-hidden">
         <i class="fas fa-comment-dots text-6xl text-gray-300 mb-4"></i>
         <p class="text-gray-500 mb-4">Belum ada sambutan</p>
         <a href="<?= base_url('admin/lembaga/greeting/create') ?>" 

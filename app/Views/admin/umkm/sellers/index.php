@@ -13,12 +13,6 @@
     </a>
 </div>
 
-<?php if (session()->getFlashdata('success')): ?>
-    <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg mb-6">
-        <i class="fas fa-check-circle mr-2"></i><?= session()->getFlashdata('success') ?>
-    </div>
-<?php endif; ?>
-
 <!-- Filter Tabs -->
 <div class="bg-white rounded-lg shadow-md mb-6">
     <div class="flex border-b">
@@ -127,7 +121,8 @@
                             </a>
                         <?php endif; ?>
                         <a href="<?= base_url('admin/umkm/sellers/delete/' . $seller['id']) ?>" 
-                           onclick="return confirm('Yakin ingin menghapus pelapak ini?')"
+                           data-confirm="Yakin ingin menghapus pelapak ini?"
+                           data-confirm-type="delete"
                            class="flex-1 px-3 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition text-sm text-center">
                             <i class="fas fa-trash mr-1"></i>Hapus
                         </a>

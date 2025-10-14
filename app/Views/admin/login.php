@@ -1,3 +1,7 @@
+<?php
+$siteLogo = app_setting_asset('site_logo', 'assets/images/resources/logo-1.png');
+$siteIcon = app_setting_asset('site_icon', 'assets/images/favicons/favicon-32x32.png');
+?>
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -10,6 +14,13 @@
     
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="icon" type="image/png" href="<?= $siteIcon ?>">
+    <link rel="apple-touch-icon" href="<?= $siteIcon ?>">
+
+    <!-- SweetAlert2 -->
+    <link rel="stylesheet" href="<?= base_url('assets/plugins/sweetalert2/sweetalert2.min.css') ?>">
+    <script src="<?= base_url('assets/plugins/sweetalert2/sweetalert2.all.min.js') ?>"></script>
 </head>
 <body class="bg-gradient-to-br from-blue-500 to-blue-900 min-h-screen flex items-center justify-center p-4">
     
@@ -20,8 +31,8 @@
             
             <!-- Header -->
             <div class="bg-blue-900 text-white p-8 text-center">
-                <div class="w-20 h-20 bg-white rounded-full mx-auto mb-4 flex items-center justify-center">
-                    <i class="fas fa-church text-blue-900 text-3xl"></i>
+                <div class="w-24 h-24 bg-white rounded-full mx-auto mb-4 flex items-center justify-center overflow-hidden">
+                    <img src="<?= $siteLogo ?>" alt="Logo" class="max-h-full max-w-full object-contain">
                 </div>
                 <h1 class="text-2xl font-bold">CMS FLOBAMORA</h1>
                 <p class="text-blue-200 text-sm mt-2">Admin Panel</p>
@@ -31,10 +42,16 @@
             <div class="p-8">
                 
                 <?php if (session()->getFlashdata('error')): ?>
-                    <div class="mb-6 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg text-sm">
-                        <i class="fas fa-exclamation-circle mr-2"></i>
-                        <?= session()->getFlashdata('error') ?>
-                    </div>
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function () {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Login Gagal',
+                                text: <?= json_encode(session()->getFlashdata('error')) ?>,
+                                confirmButtonColor: '#EF4444'
+                            });
+                        });
+                    </script>
                 <?php endif; ?>
                 
                 <form method="POST" action="<?= base_url('admin/login') ?>">

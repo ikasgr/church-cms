@@ -35,6 +35,7 @@ class SettingModel extends Model
 
     // Validation
     protected $validationRules      = [
+        'id'    => 'permit_empty',
         'key'   => 'required|is_unique[settings.key,id,{id}]',
         'value' => 'required',
         'type'  => 'required|in_list[text,textarea,number,boolean,json]',
@@ -94,7 +95,8 @@ class SettingModel extends Model
         ];
         
         if ($existing) {
-            return $this->update($existing['id'], $data);
+            $data['id'] = $existing['id'];
+            return $this->save($data);
         } else {
             return $this->insert($data);
         }

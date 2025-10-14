@@ -79,7 +79,8 @@
                             </a>
                             <?php if ($u['id'] != session()->get('userId')): ?>
                                 <a href="<?= base_url('admin/konfigurasi/users/delete/' . $u['id']) ?>" 
-                                   onclick="return confirm('Yakin ingin menghapus user ini?')"
+                                   data-confirm="Yakin ingin menghapus user ini?"
+                                   data-confirm-type="delete"
                                    class="text-red-600 hover:text-red-900" title="Hapus">
                                     <i class="fas fa-trash"></i>
                                 </a>

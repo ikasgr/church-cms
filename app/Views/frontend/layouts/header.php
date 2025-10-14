@@ -1,3 +1,8 @@
+<?php
+$siteLogo = app_setting_asset('site_logo', 'assets/images/resources/logo-1.png');
+$siteLogoAlt = app_setting('site_name', 'CMS Church');
+$siteIcon = app_setting_asset('site_icon', 'assets/images/favicons/favicon-32x32.png');
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,9 +10,9 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<title><?= esc($title ?? 'CMS Church || Responsive HTML 5 Template') ?></title>
 	<meta name="description" content="CMS Church HTML 5 Template" />
-	<link rel="apple-touch-icon" sizes="180x180" href="<?= base_url('assets/images/favicons/apple-touch-icon.png') ?>" />
-	<link rel="icon" type="image/png" sizes="32x32" href="<?= base_url('assets/images/favicons/favicon-32x32.png') ?>" />
-	<link rel="icon" type="image/png" sizes="16x16" href="<?= base_url('assets/images/favicons/favicon-16x16.png') ?>" />
+	<link rel="apple-touch-icon" sizes="180x180" href="<?= $siteIcon ?>" />
+	<link rel="icon" type="image/png" sizes="32x32" href="<?= $siteIcon ?>" />
+	<link rel="icon" type="image/png" sizes="16x16" href="<?= $siteIcon ?>" />
 	<link rel="manifest" href="<?= base_url('assets/images/favicons/site.webmanifest') ?>" />
 	<link href="https://fonts.googleapis.com/css2?family=Amita:wght@400;700&family=Outfit:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
 	<link rel="stylesheet" href="<?= base_url('assets/vendors/animate/animate.min.css') ?>" />
@@ -66,7 +71,7 @@
 						<div class="main-header-one__top-left">
 							<div class="logo-box-one">
 								<a href="<?= base_url() ?>">
-									<img src="<?= base_url('assets/images/resources/logo-1.png') ?>" alt="Awesome Logo" title="" />
+									<img src="<?= $siteLogo ?>" alt="<?= esc($siteLogoAlt) ?>" title="<?= esc($siteLogoAlt) ?>" />
 								</a>
 							</div>
 						</div>

@@ -9,12 +9,6 @@
     </div>
 </div>
 
-<?php if (session()->getFlashdata('success')): ?>
-    <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg mb-6">
-        <i class="fas fa-check-circle mr-2"></i><?= session()->getFlashdata('success') ?>
-    </div>
-<?php endif; ?>
-
 <!-- Filter Tabs -->
 <div class="bg-white rounded-lg shadow-md mb-6">
     <div class="flex overflow-x-auto border-b">

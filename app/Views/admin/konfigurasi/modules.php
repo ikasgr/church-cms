@@ -7,12 +7,6 @@
     <p class="text-sm text-gray-600 mt-1">Aktifkan atau nonaktifkan modul aplikasi</p>
 </div>
 
-<?php if (session()->getFlashdata('success')): ?>
-    <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg mb-6">
-        <i class="fas fa-check-circle mr-2"></i><?= session()->getFlashdata('success') ?>
-    </div>
-<?php endif; ?>
-
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
     <?php foreach ($modules as $key => $module): ?>
         <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition">

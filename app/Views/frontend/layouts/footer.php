@@ -35,7 +35,7 @@
               <div class="footer-widget__single">
                 <div class="footer-widget__single-about">
                   <div class="logo-box">
-                    <a href="<?= base_url() ?>"><img src="<?= base_url('assets/images/resources/logo-2.png') ?>" alt="#"></a>
+                    <a href="<?= base_url() ?>"><img src="<?= $siteLogo ?>" alt="<?= esc($siteLogoAlt) ?>"></a>
                   </div>
                   <div class="footer-widget__single-about-text">
                     <p>Our CMS Church charity At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium</p>
@@ -165,7 +165,7 @@
     </span>
     <div class="logo-box">
       <a href="<?= base_url() ?>" aria-label="logo image">
-        <img src="<?= base_url('assets/images/resources/mobile-nav-logo.png') ?>" alt="" />
+        <img src="<?= $siteLogo ?>" alt="<?= esc($siteLogoAlt) ?>" />
       </a>
     </div>
     <div class="mobile-nav__container"></div>

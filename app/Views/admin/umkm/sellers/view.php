@@ -36,12 +36,6 @@
     </div>
 </div>
 
-<?php if (session()->getFlashdata('success')): ?>
-    <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg mb-6">
-        <i class="fas fa-check-circle mr-2"></i><?= session()->getFlashdata('success') ?>
-    </div>
-<?php endif; ?>
-
 <!-- Status Badge -->
 <div class="mb-6">
     <?php

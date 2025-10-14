@@ -159,7 +159,7 @@
                 Urutan Tampil
             </label>
             <input type="number" id="order_position" name="order_position" 
-                   value="<?= old('order_position', $gallery['order_position']) ?>"
+                   value="<?= old('order_position', $gallery['order_position'] ?? '') ?>"
                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                    placeholder="0">
             <p class="text-xs text-gray-500 mt-1">Semakin kecil angka, semakin awal ditampilkan</p>

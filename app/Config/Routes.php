@@ -1,5 +1,6 @@
 <?php
 
+use CodeIgniter\Exceptions\PageNotFoundException;
 use CodeIgniter\Router\RouteCollection;
 
 /**
@@ -8,6 +9,22 @@ use CodeIgniter\Router\RouteCollection;
 
 // Frontend Routes
 $routes->get('/', 'Home::index');
+
+$routes->get('uploads/(.*)', static function (string $path) {
+    $uploadsRoot = realpath(FCPATH . 'uploads');
+    $targetPath  = realpath(FCPATH . 'uploads/' . ltrim($path, '/'));
+
+    if (!$uploadsRoot || !$targetPath || strpos($targetPath, $uploadsRoot) !== 0 || !is_file($targetPath)) {
+        throw PageNotFoundException::forPageNotFound();
+    }
+
+    $mimeType = mime_content_type($targetPath) ?: 'application/octet-stream';
+
+    return service('response')
+        ->setContentType($mimeType)
+        ->setBody(file_get_contents($targetPath));
+});
+
 $routes->get('/about', 'Home::about');
 $routes->get('/contact', 'Home::contact');
 $routes->post('/contact', 'Home::contactSubmit');
@@ -245,11 +262,6 @@ $routes->group('admin', function($routes) {
     $routes->group('konfigurasi', function($routes) {
         $routes->get('settings', 'AdminKonfigurasi::settings');
         $routes->post('settings', 'AdminKonfigurasi::settings');
-        $routes->get('settings/create', 'AdminKonfigurasi::settingCreate');
-        $routes->post('settings/create', 'AdminKonfigurasi::settingCreate');
-        $routes->get('settings/edit/(:num)', 'AdminKonfigurasi::settingEdit/$1');
-        $routes->post('settings/edit/(:num)', 'AdminKonfigurasi::settingEdit/$1');
-        $routes->get('settings/delete/(:num)', 'AdminKonfigurasi::settingDelete/$1');
         
         $routes->get('users', 'AdminKonfigurasi::users');
         $routes->get('users/create', 'AdminKonfigurasi::userCreate');

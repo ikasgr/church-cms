@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Models\SettingModel;
 use App\Models\UserModel;
 use App\Models\MenuModel;
+use Config\Database;
 
 class AdminKonfigurasi extends BaseController
 {
@@ -26,110 +27,83 @@ class AdminKonfigurasi extends BaseController
     // Settings Management
     public function settings()
     {
-        $group = $this->request->getGet('group') ?: 'general';
-        
-        $data = [
-            'title' => 'Pengaturan',
-            'settings' => $this->settingModel->where('group', $group)->findAll(),
-            'group' => $group
-        ];
+        $groups = ['identitas', 'konten', 'medsos', 'notif', 'utility'];
+        $activeTab = $this->request->getGet('tab') ?: 'identitas';
 
         if ($this->request->getMethod() === 'POST') {
             $postData = $this->request->getPost();
-            
+            $activeTab = $postData['active_tab'] ?? $activeTab;
+
+            unset($postData['csrf_test_name'], $postData['active_tab']);
+
             foreach ($postData as $key => $value) {
-                if ($key !== 'csrf_test_name') {
-                    $setting = $this->settingModel->where('key', $key)->first();
-                    if ($setting) {
-                        $this->settingModel->setSetting($key, $value, $setting['type'], $setting['group']);
+                $setting = $this->settingModel->where('key', $key)->first();
+                $type = $setting['type'] ?? $this->inferSettingType($key, $value);
+                $group = $setting['group'] ?? (in_array($activeTab, $groups, true) ? $activeTab : 'general');
+
+                if ($type === 'boolean') {
+                    $value = in_array($value, ['1', 1, true, 'true', 'yes', 'on'], true) ? 1 : 0;
+                }
+
+                $this->settingModel->setSetting($key, $value, $type, $group);
+            }
+
+            $fileFields = [
+                'site_logo' => 'identitas',
+                'site_icon' => 'identitas',
+            ];
+
+            foreach ($fileFields as $field => $groupKey) {
+                $file = $this->request->getFile($field);
+
+                if (!$file || !$file->isValid() || $file->hasMoved()) {
+                    continue;
+                }
+
+                $directory = FCPATH . 'uploads/settings';
+
+                if (!is_dir($directory)) {
+                    mkdir($directory, 0775, true);
+                }
+
+                $existing = $this->settingModel->where('key', $field)->first();
+
+                if ($existing && !empty($existing['value'])) {
+                    $existingPath = $directory . '/' . $existing['value'];
+                    if (is_file($existingPath)) {
+                        @unlink($existingPath);
                     }
                 }
+
+                $newName = $file->getRandomName();
+                $file->move($directory, $newName);
+
+                $this->settingModel->setSetting($field, $newName, 'text', $groupKey);
             }
 
             session()->setFlashdata('success', 'Pengaturan berhasil disimpan');
-            return redirect()->to('/admin/konfigurasi/settings?group=' . $group);
+            return redirect()->to('/admin/konfigurasi/settings?tab=' . $activeTab);
         }
+
+        $settingsByGroup = [];
+        foreach ($groups as $groupKey) {
+            $settingsByGroup[$groupKey] = $this->settingModel
+                ->where('group', $groupKey)
+                ->orderBy('id', 'ASC')
+                ->findAll();
+        }
+
+        if (!in_array($activeTab, $groups, true)) {
+            $activeTab = 'identitas';
+        }
+
+        $data = [
+            'title' => 'Pengaturan Sistem',
+            'settings' => $settingsByGroup,
+            'activeTab' => $activeTab,
+        ];
 
         return view('admin/konfigurasi/settings', $data);
-    }
-
-    public function settingCreate()
-    {
-        $data = [
-            'title' => 'Tambah Pengaturan'
-        ];
-
-        if ($this->request->getMethod() === 'POST') {
-            $rules = [
-                'key' => 'required|is_unique[settings.key]',
-                'value' => 'required',
-                'type' => 'required|in_list[text,textarea,number,boolean,json]',
-            ];
-
-            if ($this->validate($rules)) {
-                $insertData = [
-                    'key' => $this->request->getPost('key'),
-                    'value' => $this->request->getPost('value'),
-                    'type' => $this->request->getPost('type'),
-                    'group' => $this->request->getPost('group') ?: 'general',
-                    'description' => $this->request->getPost('description'),
-                ];
-
-                $this->settingModel->insert($insertData);
-                session()->setFlashdata('success', 'Pengaturan berhasil ditambahkan');
-                return redirect()->to('/admin/konfigurasi/settings');
-            } else {
-                $data['validation'] = $this->validator;
-            }
-        }
-
-        return view('admin/konfigurasi/settings_create', $data);
-    }
-
-    public function settingEdit($id)
-    {
-        $setting = $this->settingModel->find($id);
-        if (!$setting) {
-            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
-        }
-
-        $data = [
-            'title' => 'Edit Pengaturan',
-            'setting' => $setting
-        ];
-
-        if ($this->request->getMethod() === 'POST') {
-            $rules = [
-                'key' => 'required|is_unique[settings.key,id,' . $id . ']',
-                'value' => 'required',
-                'type' => 'required|in_list[text,textarea,number,boolean,json]',
-            ];
-
-            if ($this->validate($rules)) {
-                $updateData = [
-                    'key' => $this->request->getPost('key'),
-                    'value' => $this->request->getPost('value'),
-                    'type' => $this->request->getPost('type'),
-                    'group' => $this->request->getPost('group') ?: 'general',
-                    'description' => $this->request->getPost('description'),
-                ];
-
-                $this->settingModel->update($id, $updateData);
-                session()->setFlashdata('success', 'Pengaturan berhasil diperbarui');
-                return redirect()->to('/admin/konfigurasi/settings');
-            } else {
-                $data['validation'] = $this->validator;
-            }
-        }
-
-        return view('admin/konfigurasi/settings_edit', $data);
-    }
-
-    public function settingDelete($id)
-    {
-        $this->settingModel->delete($id);
-        session()->setFlashdata('success', 'Pengaturan berhasil dihapus');
-        return redirect()->to('/admin/konfigurasi/settings');
     }
 
     // User Management
@@ -407,5 +381,83 @@ class AdminKonfigurasi extends BaseController
 
         $data['theme'] = $this->settingModel->getByGroup('theme');
         return view('admin/konfigurasi/theme', $data);
+    }
+
+    private function inferSettingType(string $key, $value): string
+    {
+        if (is_array($value)) {
+            return 'json';
+        }
+
+        $booleanValues = ['1', '0', 1, 0, true, false, 'true', 'false', 'yes', 'no', 'on', 'off'];
+        if (in_array($value, $booleanValues, true)) {
+            return 'boolean';
+        }
+
+        if (is_numeric($value)) {
+            return 'number';
+        }
+
+        return (strlen((string) $value) > 255) ? 'textarea' : 'text';
+    }
+
+    public function backupDatabase()
+    {
+        $method = strtolower($this->request->getMethod());
+
+        if (!in_array($method, ['get', 'post'], true)) {
+            return redirect()->to('/admin/konfigurasi/settings?tab=utility');
+        }
+
+        try {
+            $db = Database::connect();
+            $tables = $db->listTables();
+
+            if (empty($tables)) {
+                session()->setFlashdata('error', 'Tidak ada tabel yang ditemukan untuk dicadangkan.');
+                return redirect()->to('/admin/konfigurasi/settings?tab=utility');
+            }
+
+            $lineBreak = PHP_EOL;
+            $backupSql = '-- Church CMS Database Backup' . $lineBreak;
+            $backupSql .= '-- Generated at: ' . date('Y-m-d H:i:s') . $lineBreak . $lineBreak;
+
+            foreach ($tables as $table) {
+                $tableName = str_replace('`', '``', $table);
+
+                $backupSql .= 'DROP TABLE IF EXISTS `' . $tableName . '`;' . $lineBreak;
+
+                $createQuery = $db->query('SHOW CREATE TABLE `' . $tableName . '`');
+                $createRow = $createQuery->getRowArray();
+                if (isset($createRow['Create Table'])) {
+                    $backupSql .= $createRow['Create Table'] . ';' . $lineBreak . $lineBreak;
+                }
+
+                $dataQuery = $db->query('SELECT * FROM `' . $tableName . '`');
+                foreach ($dataQuery->getResultArray() as $row) {
+                    $columns = array_map(static function ($column) {
+                        return '`' . str_replace('`', '``', $column) . '`';
+                    }, array_keys($row));
+                    $values = array_map(static function ($value) use ($db) {
+                        return $db->escape($value);
+                    }, array_values($row));
+
+                    $backupSql .= 'INSERT INTO `' . $tableName . '` (' . implode(', ', $columns) . ') VALUES (' . implode(', ', $values) . ');' . $lineBreak;
+                }
+
+                $backupSql .= $lineBreak;
+            }
+
+            $fileName = 'backup-' . date('Ymd-His') . '.sql';
+
+            return $this->response
+                ->setHeader('Content-Type', 'application/sql')
+                ->setHeader('Content-Disposition', 'attachment; filename="' . $fileName . '"')
+                ->setBody($backupSql);
+        } catch (\Throwable $exception) {
+            log_message('error', 'Database backup gagal: ' . $exception->getMessage());
+            session()->setFlashdata('error', 'Backup database gagal dibuat.');
+            return redirect()->to('/admin/konfigurasi/settings?tab=utility');
+        }
     }
 }
