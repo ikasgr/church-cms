@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Models\SettingModel;
 use App\Models\UserModel;
 use App\Models\MenuModel;
+use App\Models\SellerModel;
 use Config\Database;
 
 class AdminKonfigurasi extends BaseController
@@ -12,12 +13,14 @@ class AdminKonfigurasi extends BaseController
     protected $settingModel;
     protected $userModel;
     protected $menuModel;
+    protected $sellerModel;
 
     public function __construct()
     {
         $this->settingModel = new SettingModel();
         $this->userModel = new UserModel();
         $this->menuModel = new MenuModel();
+        $this->sellerModel = new SellerModel();
 
         if (!session()->get('isLoggedIn')) {
             return redirect()->to('/admin/login');
@@ -119,36 +122,78 @@ class AdminKonfigurasi extends BaseController
 
     public function userCreate()
     {
+        $availableSellers = $this->sellerModel
+            ->select('id, business_name, owner_name, status')
+            ->where('user_id', null)
+            ->orderBy('business_name', 'ASC')
+            ->findAll();
+
         $data = [
-            'title' => 'Tambah User'
+            'title' => 'Tambah User',
+            'sellers' => $availableSellers,
         ];
 
         if ($this->request->getMethod() === 'POST') {
+            $role = $this->request->getPost('role');
+
             $rules = [
                 'username' => 'required|min_length[3]|max_length[50]|is_unique[users.username]',
                 'email' => 'required|valid_email|is_unique[users.email]',
                 'password' => 'required|min_length[6]',
                 'confirm_password' => 'required|matches[password]',
                 'full_name' => 'required|min_length[3]|max_length[255]',
-                'role' => 'required|in_list[admin,editor,viewer]',
+                'role' => 'required|in_list[admin,editor,viewer,seller]',
             ];
 
-            if ($this->validate($rules)) {
-                $insertData = [
-                    'username' => $this->request->getPost('username'),
-                    'email' => $this->request->getPost('email'),
-                    'password' => $this->request->getPost('password'),
-                    'full_name' => $this->request->getPost('full_name'),
-                    'role' => $this->request->getPost('role'),
-                    'is_active' => $this->request->getPost('is_active') ? 1 : 0,
-                ];
-
-                $this->userModel->insert($insertData);
-                session()->setFlashdata('success', 'User berhasil ditambahkan');
-                return redirect()->to('/admin/konfigurasi/users');
-            } else {
-                $data['validation'] = $this->validator;
+            if ($role === 'seller') {
+                $rules['seller_id'] = 'required|is_natural_no_zero';
             }
+
+            $validation = \Config\Services::validation();
+            $validation->setRules($rules);
+
+            if (!$validation->withRequest($this->request)->run()) {
+                return redirect()->back()->withInput()->with('validation', $validation);
+            }
+
+            if ($role === 'seller') {
+                $sellerId = (int) $this->request->getPost('seller_id');
+                $seller = $this->sellerModel->find($sellerId);
+
+                if (!$seller) {
+                    $validation->setError('seller_id', 'Pelapak tidak ditemukan.');
+                    return redirect()->back()->withInput()->with('validation', $validation);
+                }
+
+                if (!empty($seller['user_id'])) {
+                    $validation->setError('seller_id', 'Pelapak ini sudah terhubung dengan akun lain.');
+                    return redirect()->back()->withInput()->with('validation', $validation);
+                }
+            }
+
+            $insertData = [
+                'username' => $this->request->getPost('username'),
+                'email' => $this->request->getPost('email'),
+                'password' => $this->request->getPost('password'),
+                'full_name' => $this->request->getPost('full_name'),
+                'role' => $role,
+                'is_active' => $this->request->getPost('is_active') ? 1 : 0,
+            ];
+
+            $this->userModel->insert($insertData);
+            $userId = $this->userModel->getInsertID();
+
+            if ($role === 'seller') {
+                $sellerId = (int) $this->request->getPost('seller_id');
+                $this->sellerModel->update($sellerId, ['user_id' => $userId, 'status' => $this->request->getPost('seller_status') ?? $this->sellerModel->find($sellerId)['status']]);
+            }
+
+            session()->setFlashdata('success', 'User berhasil ditambahkan');
+            return redirect()->to('/admin/konfigurasi/users');
+        }
+
+        if (session()->has('validation')) {
+            $data['validation'] = session('validation');
         }
 
         return view('admin/konfigurasi/users/create', $data);
@@ -161,17 +206,32 @@ class AdminKonfigurasi extends BaseController
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }
 
+        $currentSeller = $this->sellerModel->where('user_id', $id)->first();
+
+        $availableSellers = $this->sellerModel
+            ->select('id, business_name, owner_name, status, user_id')
+            ->groupStart()
+                ->where('user_id', null)
+                ->orWhere('id', $currentSeller['id'] ?? 0)
+            ->groupEnd()
+            ->orderBy('business_name', 'ASC')
+            ->findAll();
+
         $data = [
             'title' => 'Edit User',
-            'user' => $user
+            'user' => $user,
+            'sellers' => $availableSellers,
+            'currentSeller' => $currentSeller,
         ];
 
         if ($this->request->getMethod() === 'POST') {
+            $role = $this->request->getPost('role');
+
             $rules = [
                 'username' => 'required|min_length[3]|max_length[50]|is_unique[users.username,id,' . $id . ']',
                 'email' => 'required|valid_email|is_unique[users.email,id,' . $id . ']',
                 'full_name' => 'required|min_length[3]|max_length[255]',
-                'role' => 'required|in_list[admin,editor,viewer]',
+                'role' => 'required|in_list[admin,editor,viewer,seller]',
             ];
 
             if ($this->request->getPost('password')) {
@@ -179,25 +239,66 @@ class AdminKonfigurasi extends BaseController
                 $rules['confirm_password'] = 'required|matches[password]';
             }
 
-            if ($this->validate($rules)) {
-                $updateData = [
-                    'username' => $this->request->getPost('username'),
-                    'email' => $this->request->getPost('email'),
-                    'full_name' => $this->request->getPost('full_name'),
-                    'role' => $this->request->getPost('role'),
-                    'is_active' => $this->request->getPost('is_active') ? 1 : 0,
-                ];
+            if ($role === 'seller') {
+                $rules['seller_id'] = 'required|is_natural_no_zero';
+            }
 
-                if ($this->request->getPost('password')) {
-                    $updateData['password'] = $this->request->getPost('password');
+            $validation = \Config\Services::validation();
+            $validation->setRules($rules);
+
+            if (!$validation->withRequest($this->request)->run()) {
+                return redirect()->back()->withInput()->with('validation', $validation);
+            }
+
+            $sellerId = $this->request->getPost('seller_id');
+
+            if ($role === 'seller') {
+                $seller = $sellerId ? $this->sellerModel->find($sellerId) : null;
+
+                if (!$seller) {
+                    $validation->setError('seller_id', 'Pelapak tidak ditemukan.');
+                    return redirect()->back()->withInput()->with('validation', $validation);
                 }
 
-                $this->userModel->update($id, $updateData);
-                session()->setFlashdata('success', 'User berhasil diperbarui');
-                return redirect()->to('/admin/konfigurasi/users');
-            } else {
-                $data['validation'] = $this->validator;
+                if (!empty($seller['user_id']) && (int) $seller['user_id'] !== (int) $id) {
+                    $validation->setError('seller_id', 'Pelapak ini sudah terhubung dengan akun lain.');
+                    return redirect()->back()->withInput()->with('validation', $validation);
+                }
             }
+
+            $updateData = [
+                'username' => $this->request->getPost('username'),
+                'email' => $this->request->getPost('email'),
+                'full_name' => $this->request->getPost('full_name'),
+                'role' => $role,
+                'is_active' => $this->request->getPost('is_active') ? 1 : 0,
+            ];
+
+            if ($this->request->getPost('password')) {
+                $updateData['password'] = $this->request->getPost('password');
+            }
+
+            $this->userModel->update($id, $updateData);
+
+            // Handle seller linkage updates
+            if ($role === 'seller') {
+                $seller = $this->sellerModel->find($sellerId);
+
+                if ($currentSeller && (int) $currentSeller['id'] !== (int) $seller['id']) {
+                    $this->sellerModel->update($currentSeller['id'], ['user_id' => null]);
+                }
+
+                $this->sellerModel->update($seller['id'], ['user_id' => $id]);
+            } elseif ($currentSeller) {
+                $this->sellerModel->update($currentSeller['id'], ['user_id' => null]);
+            }
+
+            session()->setFlashdata('success', 'User berhasil diperbarui');
+            return redirect()->to('/admin/konfigurasi/users');
+        }
+
+        if (session()->has('validation')) {
+            $data['validation'] = session('validation');
         }
 
         return view('admin/konfigurasi/users/edit', $data);

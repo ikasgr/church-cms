@@ -1,3 +1,8 @@
+<?php
+$siteLogo = $siteLogo ?? app_setting_asset('site_logo', 'assets/images/resources/logo-1.png');
+$siteLogoAlt = $siteLogoAlt ?? app_setting('site_name', 'CMS Church');
+?>
+
   <!-- FOOTER SECTION -->
   <footer class="footer-one">
     <div class="footer-one__bg" style="background-image: url(<?= base_url('assets/images/pattern/footer-v1-bg.jpg') ?>);"></div>

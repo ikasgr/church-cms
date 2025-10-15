@@ -71,7 +71,7 @@ $siteIcon = app_setting_asset('site_icon', 'assets/images/favicons/favicon-32x32
 						<div class="main-header-one__top-left">
 							<div class="logo-box-one">
 								<a href="<?= base_url() ?>">
-									<img src="<?= $siteLogo ?>" alt="<?= esc($siteLogoAlt) ?>" title="<?= esc($siteLogoAlt) ?>" />
+									<img src="<?= $siteLogo ?>" alt="<?= esc($siteLogoAlt) ?>" title="<?= esc($siteLogoAlt) ?>" style="max-width:100px;width:100%;height:auto;" />
 								</a>
 							</div>
 						</div>

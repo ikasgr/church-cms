@@ -52,6 +52,12 @@ $routes->get('/gallery', 'Home::gallery');
 $routes->get('/gallery/photos', 'Home::galleryPhotos');
 $routes->get('/gallery/videos', 'Home::galleryVideos');
 
+// UMKM Marketplace
+$routes->get('/umkm', 'Home::umkm');
+$routes->get('/umkm/kategori/(:segment)', 'Home::umkmCategory/$1');
+$routes->get('/umkm/produk/(:segment)', 'Home::umkmProduct/$1');
+$routes->get('/umkm/pelapak/(:num)', 'Home::umkmSeller/$1');
+
 // Registration
 $routes->get('/registration', 'Home::registration');
 $routes->post('/registration/submit', 'Home::registrationSubmit');

@@ -285,17 +285,13 @@ $konfigurasiThemeActive = $startsWith($currentPath, 'admin/konfigurasi/theme');
                     <button type="button" @click="sidebarOpen = !sidebarOpen" class="hidden lg:inline-flex items-center justify-center w-10 h-10 rounded-lg text-gray-600 hover:text-blue-600 hover:bg-blue-50 transition" aria-label="Toggle sidebar">
                         <i :class="sidebarOpen ? 'fas fa-chevron-left text-lg' : 'fas fa-bars text-lg'"></i>
                     </button>
-                </div>
-
-                <div class="flex items-center gap-3 ml-auto">
-                    <a href="<?= base_url('admin') ?>" class="hidden lg:flex items-center gap-2 px-3 py-2 text-gray-600 hover:text-blue-600 transition">
-                        <img src="<?= $siteLogo ?>" alt="Site Logo" class="h-8 w-auto object-contain">
-                    </a>
                     <a href="<?= base_url('/') ?>" target="_blank" rel="noopener" class="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition">
                         <i class="fas fa-external-link-alt"></i>
                         <span>Kunjungi Situs</span>
                     </a>
+                </div>
 
+                <div class="flex items-center gap-3 ml-auto">
                     <!-- User Menu -->
                     <div x-data="{ open: false }" class="relative">
                         <button @click="open = !open" class="flex items-center space-x-2">
@@ -378,9 +374,9 @@ $konfigurasiThemeActive = $startsWith($currentPath, 'admin/konfigurasi/theme');
                     <h1 class="text-2xl font-bold text-gray-800"><?= $title ?? 'Dashboard' ?></h1>
                     <div class="flex items-center gap-2">
                         <a href="<?= base_url('admin') ?>" class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
-                            <i class="fas fa-home mr-2"></i>Home
+                            <i class="fas fa-home"></i>
                         </a>
-                        <button type="button" onclick="history.back()" class="inline-flex items-center px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition">
+                        <button type="button" onclick="history.back()" class="inline-flex items-center px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-red-300 transition">
                             <i class="fas fa-arrow-left mr-2"></i>Kembali
                         </button>
                     </div>

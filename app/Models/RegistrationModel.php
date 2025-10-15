@@ -23,15 +23,20 @@ class RegistrationModel extends Model
         'email',
         'parent_name',
         'parent_phone',
+        'baptism_place',
+        'baptism_date',
         'partner_name',
         'partner_birth_place',
         'partner_birth_date',
+        'partner_address',
+        'partner_phone',
         'preferred_date',
         'notes',
         'status',
         'processed_by',
         'processed_at',
-        'admin_notes'
+        'admin_notes',
+        'document_path'
     ];
 
     protected bool $allowEmptyInserts = false;

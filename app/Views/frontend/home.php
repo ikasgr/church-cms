@@ -395,77 +395,100 @@
 			<div class="container">
 				<div class="team-one__top">
 					<div class="sec-title">
-						<div class="sec-title__tagline"><h6>Our Support Team</h6></div>
-						<h2 class="sec-title__title">Who are always helpful</h2>
+						<div class="sec-title__tagline"><h6>Pelayan Gereja</h6></div>
+						<h2 class="sec-title__title">Mejelis & Pelayan Gereja</h2>
 					</div>
-					<div class="btn-box"><a href="#">View All Expert List</a></div>
+					<div class="btn-box"><a href="<?= base_url('majelis') ?>">Lihat Semua</a></div>
 				</div>
-				<div class="row">
-					<?php $team = [
-						['image' => 'team-v1-img1.jpg', 'name' => 'Martin Kellis', 'role' => 'Head of Designer'],
-						['image' => 'team-v1-img2.jpg', 'name' => 'Martin Rage', 'role' => 'Marketing Expert and Head'],
-						['image' => 'team-v1-img3.jpg', 'name' => 'Rober Wiliam', 'role' => 'Executive Advisor, City Group'],
-					]; ?>
-					<?php foreach ($team as $index => $member): ?>
-						<div class="col-xl-4 col-lg-4 wow <?= $index === 1 ? 'fadeInRight' : 'fadeInLeft' ?>" data-wow-delay="<?= $index * 100 ?>ms" data-wow-duration="1500ms">
+				<?php if (!empty($majelis)): ?>
+					<div class="team-one__carousel owl-carousel owl-theme thm-owl__carousel" data-owl-options='{"loop":true,"autoplay":true,"margin":30,"nav":false,"dots":true,"smartSpeed":600,"responsive":{"0":{"items":1},"576":{"items":2},"992":{"items":3}}}'>
+						<?php foreach ($majelis as $member): ?>
 							<div class="team-one__single">
 								<div class="team-one__single-img">
 									<div class="team-one__single-img-bg" style="background-image:url('<?= base_url('assets/images/shapes/team-v1-shape1.png') ?>');"></div>
-									<div class="inner"><img src="<?= base_url('assets/images/team/' . $member['image']) ?>" alt="#"></div>
+									<div class="inner">
+										<?php if (!empty($member['photo'])): ?>
+											<img src="<?= base_url('uploads/majelis/' . $member['photo']) ?>" alt="<?= esc($member['name']) ?>">
+										<?php else: ?>
+											<img src="<?= base_url('assets/images/team/team-placeholder.jpg') ?>" alt="<?= esc($member['name']) ?>">
+										<?php endif ?>
+									</div>
 								</div>
-								<div class="team-one__single-content text-center"><h2><a href="#"><?= esc($member['name']) ?></a></h2><p><?= esc($member['role']) ?></p></div>
+								<div class="team-one__single-content text-center">
+									<h2><a href="<?= base_url('majelis') ?>#<?= esc(url_title($member['name'], '-', true)) ?>"><?= esc($member['name']) ?></a></h2>
+									<p><?= esc($member['position']) ?></p>
+								</div>
 							</div>
+						<?php endforeach ?>
+					</div>
+				<?php else: ?>
+					<div class="news-block-one">
+						<div class="inner-box text-center py-60">
+							<p>Data majelis belum tersedia.</p>
 						</div>
-					<?php endforeach ?>
-				</div>
+					</div>
+				<?php endif ?>
 			</div>
 		</div>
 	</div>
 </section>
 
+
 <section class="blog-one">
-	<div class="container">
+	<div class="auto-container">
 		<div class="sec-title text-center">
-			<div class="sec-title__tagline"><h6>News Update</h6></div>
-			<h2 class="sec-title__title">Latest News & Articles</h2>
+			<div class="sec-title__tagline"><h6>Warta Terbaru</h6></div>
+			<h2 class="sec-title__title">Berita & Artikel Pilihan</h2>
 		</div>
-		<div class="row">
-			<?php $blogs = [
-				['image' => 'blog-v1-img1.jpg'],
-				['image' => 'blog-v1-img2.jpg'],
-				['image' => 'blog-v1-img3.jpg'],
-			]; ?>
-			<?php foreach ($blogs as $index => $blog): ?>
-				<div class="col-xl-4 col-lg-4 wow animated fadeInUp" data-wow-delay=".3s">
-					<div class="blog-one__single">
-						<div class="blog-one__single-img">
-							<div class="inner"><img src="<?= base_url('assets/images/blog/' . $blog['image']) ?>" alt="#"></div>
-							<ul class="overlay-text"><li><p>Charity</p></li><li class="style2"><p>12 Feb</p></li></ul>
-						</div>
-						<div class="blog-one__single-content">
-							<div class="white-bg"></div>
-							<div class="left-bg"></div>
-							<div class="right-bg"></div>
-							<ul class="meta-box">
-								<li>
-									<div class="icon"><span class="icon-user"></span></div>
-									<div class="text"><p><a href="#">By Admin</a></p></div>
-								</li>
-								<li>
-									<div class="icon"><span class="icon-comment-outline"></span></div>
-									<div class="text"><p><a href="#">12 Comment</a></p></div>
-								</li>
-							</ul>
-							<h2><a href="<?= base_url('blog-details.html') ?>">Charity of the Month Plan <br> International UK</a></h2>
-							<div class="blog-one__single-content-bottom">
-								<div class="btn-box"><a href="<?= base_url('blog-details.html') ?>">Details More <span class="icon-right-arrow21"></span></a></div>
-								<div class="icon-box"><span class="icon-bookmark"></span></div>
+		<?php if (!empty($latestNews)): ?>
+			<div class="row">
+				<?php foreach ($latestNews as $index => $news): ?>
+					<div class="col-xl-4 col-lg-4 wow fadeInUp" data-wow-delay="<?= 0.2 + ($index * 0.1) ?>s" data-wow-duration="1500ms">
+						<div class="blog-one__single">
+							<div class="blog-one__single-img">
+								<div class="inner">
+									<?php if (!empty($news['featured_image'])): ?>
+										<img src="<?= base_url('uploads/news/' . $news['featured_image']) ?>" alt="<?= esc($news['title']) ?>">
+									<?php else: ?>
+										<img src="<?= base_url('assets/images/blog/blog-v1-placeholder.jpg') ?>" alt="<?= esc($news['title']) ?>">
+									<?php endif ?>
+								</div>
+								<ul class="overlay-text">
+									<li><p><?= esc($newsCategories[$news['category']] ?? ucfirst($news['category'])) ?></p></li>
+									<li class="style2"><p><?= date('d M', strtotime($news['published_at'])) ?></p></li>
+								</ul>
+							</div>
+							<div class="blog-one__single-content">
+								<div class="white-bg"></div>
+								<div class="left-bg"></div>
+								<div class="right-bg"></div>
+								<ul class="meta-box">
+									<li>
+										<div class="icon"><span class="icon-visibility"></span></div>
+										<div class="text"><p><?= number_format((int) ($news['views'] ?? 0)) ?> kali dibaca</p></div>
+									</li>
+								</ul>
+								<h2><a href="<?= base_url('news/' . $news['slug']) ?>"><?= esc($news['title']) ?></a></h2>
+								<div class="blog-one__single-content-bottom">
+									<div class="btn-box"><a href="<?= base_url('news/' . $news['slug']) ?>">Baca Selengkapnya <span class="icon-right-arrow21"></span></a></div>
+									<div class="icon-box"><span class="icon-bookmark"></span></div>
+								</div>
 							</div>
 						</div>
 					</div>
+				<?php endforeach ?>
+			</div>
+			<div class="text-center mt-40">
+				<a href="<?= base_url('news') ?>" class="thm-btn"><span class="txt">Lihat Semua Berita</span></a>
+			</div>
+		<?php else: ?>
+			<div class="news-block-one">
+				<div class="inner-box text-center py-60">
+					<div class="icon mb-3"><span class="icon-newspaper"></span></div>
+					<p>Belum ada berita yang dipublikasikan.</p>
 				</div>
-			<?php endforeach ?>
-		</div>
+			</div>
+		<?php endif ?>
 	</div>
 </section>
 
