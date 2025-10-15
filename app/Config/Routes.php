@@ -58,11 +58,16 @@ $routes->get('/umkm/kategori/(:segment)', 'Home::umkmCategory/$1');
 $routes->get('/umkm/produk/(:segment)', 'Home::umkmProduct/$1');
 $routes->get('/umkm/pelapak/(:num)', 'Home::umkmSeller/$1');
 
+// Finance Transparency
+$routes->get('/keuangan', 'Home::finance');
+$routes->get('/keuangan/detail/(:num)', 'Home::financeDetail/$1');
+
 // Registration
 $routes->get('/registration', 'Home::registration');
 $routes->post('/registration/submit', 'Home::registrationSubmit');
 
 // Interaction
+$routes->get('/surveys', 'Home::surveys');
 $routes->get('/feedback', 'Home::feedback');
 $routes->post('/feedback/submit', 'Home::feedbackSubmit');
 $routes->get('/guestbook', 'Home::guestbook');

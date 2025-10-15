@@ -1,6 +1,57 @@
 <?php
 $siteLogo = $siteLogo ?? app_setting_asset('site_logo', 'assets/images/resources/logo-1.png');
 $siteLogoAlt = $siteLogoAlt ?? app_setting('site_name', 'CMS Church');
+$siteDescription = app_setting('site_description', 'Gereja yang memberitakan kasih Kristus dan melayani jemaat dengan sepenuh hati.');
+$footerText = app_setting('site_footer', '&copy; ' . date('Y') . ' CMS Church. All rights reserved.');
+$siteAddress = app_setting('site_office_address', 'Alamat gereja belum diatur.');
+$siteCity = app_setting('site_city', 'Kota, Provinsi');
+$siteProvince = app_setting('site_province', 'Provinsi');
+$siteEmail = app_setting('site_email', 'info@example.com');
+$sitePhone = app_setting('site_phone', '0000-0000');
+
+$socialLinks = [
+	'facebook' => app_setting('social_facebook'),
+	'instagram' => app_setting('social_instagram'),
+	'youtube' => app_setting('social_youtube'),
+	'tiktok' => app_setting('social_tiktok'),
+	'twitter' => app_setting('social_twitter'),
+	'linkedin' => app_setting('social_linkedin'),
+	'whatsapp' => app_setting('social_whatsapp'),
+];
+
+$menuModel = model(App\Models\MenuModel::class);
+$footerMenu = $menuModel->getMenuTree('footer');
+$quickLinks = !empty($footerMenu) ? $footerMenu : [
+	[
+		'label' => 'Tentang Kami',
+		'url' => '/about'
+	],
+	[
+		'label' => 'Kontak',
+		'url' => '/contact'
+	],
+	[
+		'label' => 'Pendaftaran',
+		'url' => '/registration'
+	],
+	[
+		'label' => 'Jadwal Ibadah',
+		'url' => '/ibadah'
+	],
+	[
+		'label' => 'Berita Gereja',
+		'url' => '/news'
+	],
+];
+
+$latestNews = model(App\Models\NewsModel::class)
+	->where('is_published', 1)
+	->where('published_at <=', date('Y-m-d H:i:s'))
+	->orderBy('published_at', 'DESC')
+	->select('id, title, slug, published_at, featured_image')
+	->limit(2)
+	->find();
+
 ?>
 
   <!-- FOOTER SECTION -->
@@ -15,18 +66,18 @@ $siteLogoAlt = $siteLogoAlt ?? app_setting('site_name', 'CMS Church');
           <div class="row">
             <div class="col-xl-5">
               <div class="footer-one__top-text">
-                <h2>Subscribe our newsletter</h2>
-                <p>Get the latest news other tips </p>
+                <h2><?= esc(app_setting('newsletter_title', 'Berlangganan Buletin Gereja')) ?></h2>
+                <p><?= esc(app_setting('newsletter_subtitle', 'Dapatkan kabar terbaru pelayanan dan kegiatan gereja.')) ?></p>
               </div>
             </div>
             <div class="col-xl-7">
               <div class="footer-one__top-form">
-                <form class="subscribe-form" action="#">
+                <form class="subscribe-form" action="<?= base_url('contact') ?>" method="get">
                   <div class="input-box">
-                    <input type="email" name="email" placeholder="Email Address">
+                    <input type="email" name="email" placeholder="Email Anda">
                   </div>
                   <button type="submit">
-                    <span class="text">Subscribe</span>
+                    <span class="text">Kirim</span>
                     <i class="icon-send-message"></i>
                   </button>
                 </form>
@@ -43,11 +94,11 @@ $siteLogoAlt = $siteLogoAlt ?? app_setting('site_name', 'CMS Church');
                     <a href="<?= base_url() ?>"><img src="<?= $siteLogo ?>" alt="<?= esc($siteLogoAlt) ?>"></a>
                   </div>
                   <div class="footer-widget__single-about-text">
-                    <p>Our CMS Church charity At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium</p>
+                    <p><?= esc($siteDescription) ?></p>
                   </div>
                   <div class="footer-widget__single-about-btn">
-                    <a class="thm-btn" href="<?= base_url('content.html') ?>">
-                      <span class="txt">Join Now</span>
+                    <a class="thm-btn" href="<?= base_url('contact') ?>">
+                      <span class="txt">Hubungi Kami</span>
                     </a>
                   </div>
                 </div>
@@ -56,33 +107,33 @@ $siteLogoAlt = $siteLogoAlt ?? app_setting('site_name', 'CMS Church');
             <div class="col-xl-3 col-lg-6 col-md-6 wow animated fadeInUp" data-wow-delay="0.2s">
               <div class="footer-one__single footer-one__single-address">
                 <div class="title">
-                  <h3>Address</h3>
+                  <h3>Kontak</h3>
                 </div>
                 <ul class="footer-one__single-address-box">
                   <li>
                     <div class="title-box">
-                      <h3>Our Address</h3>
+                      <h3>Alamat Gereja</h3>
                     </div>
                     <div class="inner">
                       <div class="icon-box">
                         <span class="icon-location1"></span>
                       </div>
                       <div class="content-box">
-                        <p>101 Merritt 5, north tower <br> 14851 New York, USA</p>
+                        <p><?= nl2br(esc($siteAddress)) ?><br><?= esc($siteCity) ?>, <?= esc($siteProvince) ?></p>
                       </div>
                     </div>
                   </li>
                   <li>
                     <div class="title-box">
-                      <h3>Customer Help</h3>
+                      <h3>Kantor Administrasi</h3>
                     </div>
                     <div class="inner">
                       <div class="icon-box">
                         <span class="icon-phone"></span>
                       </div>
                       <div class="content-box">
-                        <p><a href="tel:02929216215">02 92 92 16 215</a></p>
-                        <p><a href="tel:08811220077">+088 11 22 00 77</a></p>
+                        <p><a href="tel:<?= preg_replace('/\D+/', '', $sitePhone) ?>"><?= esc($sitePhone) ?></a></p>
+                        <p><a href="mailto:<?= esc($siteEmail) ?>"><?= esc($siteEmail) ?></a></p>
                       </div>
                     </div>
                   </li>
@@ -92,43 +143,45 @@ $siteLogoAlt = $siteLogoAlt ?? app_setting('site_name', 'CMS Church');
             <div class="col-xl-2 col-lg-6 col-md-6 wow animated fadeInUp" data-wow-delay="0.3s">
               <div class="footer-one__single footer-one__single-explore">
                 <div class="title">
-                  <h3>Explore Link</h3>
+                  <h3>Tautan Cepat</h3>
                 </div>
                 <ul class="footer-one__single-explore-list">
-                  <li><a href="<?= base_url('about.html') ?>">Charity</a></li>
-                  <li><a href="<?= base_url('donation.html') ?>">Donation</a></li>
-                  <li><a href="<?= base_url('about.html') ?>">Fundrising</a></li>
-                  <li><a href="<?= base_url('about.html') ?>">Our Campaign</a></li>
-                  <li><a href="<?= base_url('volunteers.html') ?>">Volunteer</a></li>
-                  <li><a href="<?= base_url('about.html') ?>">About us</a></li>
-                  <li><a href="<?= base_url('contact.html') ?>">Contact Us</a></li>
+                  <?php foreach ($quickLinks as $link): ?>
+                    <li><a href="<?= base_url(ltrim($link['url'], '/')) ?>"><?= esc($link['label']) ?></a></li>
+                  <?php endforeach ?>
                 </ul>
               </div>
             </div>
             <div class="col-xl-4 col-lg-6 col-md-6 wow animated fadeInUp" data-wow-delay="0.4s">
               <div class="footer-one__single footer-one__single-post">
                 <div class="title">
-                  <h3>Latest Post </h3>
+                  <h3>Berita Terbaru</h3>
                 </div>
                 <ul class="footer-one__single-post-box">
-                  <li>
-                    <div class="img-box">
-                      <img src="<?= base_url('assets/images/footer/footer-v1-img1.jpg') ?>" alt="#">
-                    </div>
-                    <div class="content-box">
-                      <span>12 Feb 2023</span>
-                      <p><a href="<?= base_url('blog.html') ?>">18 Best Charity Marketing <br> Campaigns</a></p>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="img-box">
-                      <img src="<?= base_url('assets/images/footer/footer-v1-img2.jpg') ?>" alt="#">
-                    </div>
-                    <div class="content-box">
-                      <span>14 Feb 2023</span>
-                      <p><a href="<?= base_url('blog.html') ?>">Charity Of The Month <br> Golden Futures</a></p>
-                    </div>
-                  </li>
+                  <?php if (empty($latestNews)): ?>
+                    <li>
+                      <div class="content-box">
+                        <p>Belum ada berita terbaru.</p>
+                      </div>
+                    </li>
+                  <?php else: ?>
+                    <?php foreach ($latestNews as $news): ?>
+                      <?php
+                        $newsImage = !empty($news['featured_image'])
+                          ? base_url('uploads/news/' . $news['featured_image'])
+                          : base_url('assets/images/resources/news-placeholder.jpg');
+                      ?>
+                      <li>
+                        <div class="img-box">
+                          <img src="<?= $newsImage ?>" alt="<?= esc($news['title']) ?>">
+                        </div>
+                        <div class="content-box">
+                          <span><?= date('d M Y', strtotime($news['published_at'])) ?></span>
+                          <p><a href="<?= base_url('news/' . $news['slug']) ?>"><?= esc($news['title']) ?></a></p>
+                        </div>
+                      </li>
+                    <?php endforeach ?>
+                  <?php endif ?>
                 </ul>
               </div>
             </div>
@@ -141,19 +194,19 @@ $siteLogoAlt = $siteLogoAlt ?? app_setting('site_name', 'CMS Church');
         <div class="bottom-inner">
           <div class="footer-one__bottom-left">
             <div class="title-box">
-              <h4>Follow Social</h4>
+              <h4>Ikuti Kami</h4>
             </div>
             <div class="social-links">
               <ul>
-                <li><a href="#"><span class="icon-facebook-logo"></span></a></li>
-                <li><a href="#"><span class="icon-twitter"></span></a></li>
-                <li><a href="#"><span class="icon-pinterest"></span></a></li>
-                <li><a href="#"><span class="icon-instagram"></span></a></li>
+                <?php foreach ($socialLinks as $platform => $url): ?>
+                  <?php if (!$url) continue; ?>
+                  <li><a href="<?= esc($url) ?>" target="_blank" rel="noopener"><span class="icon-<?= $platform === 'twitter' ? 'twitter' : ($platform === 'facebook' ? 'facebook-logo' : ($platform === 'instagram' ? 'instagram' : ($platform === 'youtube' ? 'youtube' : ($platform === 'linkedin' ? 'linkedin' : ($platform === 'tiktok' ? 'tiktok' : 'phone'))))) ?>"></span></a></li>
+                <?php endforeach ?>
               </ul>
             </div>
           </div>
           <div class="copyright">
-            <p>©2023 <a href="<?= base_url() ?>">Template_Mr</a> All Rights Reserved</p>
+            <p><?= $footerText ?></p>
           </div>
         </div>
       </div>
@@ -177,18 +230,18 @@ $siteLogoAlt = $siteLogoAlt ?? app_setting('site_name', 'CMS Church');
     <ul class="mobile-nav__contact list-unstyled">
       <li>
         <i class="fa fa-envelope"></i>
-        <a href="mailto:info@example.com">info@example.com</a>
+        <a href="mailto:<?= esc($siteEmail) ?>"><?= esc($siteEmail) ?></a>
       </li>
       <li>
         <i class="fa fa-phone-alt"></i>
-        <a href="tel:123456789">444 000 777 66</a>
+        <a href="tel:<?= preg_replace('/\D+/', '', $sitePhone) ?>"><?= esc($sitePhone) ?></a>
       </li>
     </ul>
     <div class="mobile-nav__social">
-      <a href="#" class="fab fa-twitter"></a>
-      <a href="#" class="fab fa-facebook-square"></a>
-      <a href="#" class="fab fa-pinterest-p"></a>
-      <a href="#" class="fab fa-instagram"></a>
+      <?php foreach ($socialLinks as $platform => $url): ?>
+        <?php if (!$url) continue; ?>
+        <a href="<?= esc($url) ?>" target="_blank" rel="noopener" class="fab fa-<?= $platform === 'youtube' ? 'youtube' : ($platform === 'tiktok' ? 'tiktok' : ($platform === 'linkedin' ? 'linkedin-in' : $platform)) ?>"></a>
+      <?php endforeach ?>
     </div>
   </div>
 </div>

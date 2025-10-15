@@ -2,6 +2,12 @@
 $siteLogo = app_setting_asset('site_logo', 'assets/images/resources/logo-1.png');
 $siteLogoAlt = app_setting('site_name', 'CMS Church');
 $siteIcon = app_setting_asset('site_icon', 'assets/images/favicons/favicon-32x32.png');
+$siteAddress = app_setting('site_office_address', 'Alamat gereja belum diatur');
+$siteCity = app_setting('site_city', 'Kota, Provinsi');
+$siteEmail = app_setting('site_email', 'info@example.com');
+$sitePhone = app_setting('site_phone', '0000-0000');
+$siteTicker = app_setting('site_short_name', $siteLogoAlt);
+$tickerLetters = preg_split('//u', trim($siteTicker), -1, PREG_SPLIT_NO_EMPTY);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -49,15 +55,18 @@ $siteIcon = app_setting_asset('site_icon', 'assets/images/favicons/favicon-32x32
 				<div class="animation-preloader">
 					<div class="spinner"></div>
 					<div class="txt-loading">
-						<span data-text-preloader="I" class="letters-loading">i</span>
-						<span data-text-preloader="K" class="letters-loading">k</span>
-						<span data-text-preloader="A" class="letters-loading">a</span>
-						<span data-text-preloader="S" class="letters-loading">s</span>
-						<span data-text-preloader="M" class="letters-loading">m</span>
-						<span data-text-preloader="E" class="letters-loading">e</span>
-						<span data-text-preloader="D" class="letters-loading">d</span>
-						<span data-text-preloader="I" class="letters-loading">i</span>
-						<span data-text-preloader="A" class="letters-loading">a</span>
+						<?php if (empty($tickerLetters)): ?>
+							<span data-text-preloader="<?= esc(mb_strtoupper($siteLogoAlt[0] ?? 'C')) ?>" class="letters-loading">
+								<?= esc(mb_strtolower($siteLogoAlt[0] ?? 'C')) ?>
+							</span>
+						<?php else: ?>
+							<?php foreach ($tickerLetters as $letter): ?>
+								<?php $upper = mb_strtoupper($letter); ?>
+								<span data-text-preloader="<?= esc($upper) ?>" class="letters-loading">
+									<?= esc(mb_strtolower($letter)) ?>
+								</span>
+							<?php endforeach ?>
+						<?php endif ?>
 					</div>
 				</div>
 			</div>
@@ -84,8 +93,8 @@ $siteIcon = app_setting_asset('site_icon', 'assets/images/favicons/favicon-32x32
 												<span class="icon-globe-hemisphere"></span>
 											</div>
 											<div class="text-box">
-												<p>The Strand, 14 sector Australia</p>
-												<h4>Melbourne, Australia</h4>
+												<p><?= esc($siteAddress) ?></p>
+												<h4><?= esc($siteCity) ?></h4>
 											</div>
 										</div>
 									</li>
@@ -95,8 +104,8 @@ $siteIcon = app_setting_asset('site_icon', 'assets/images/favicons/favicon-32x32
 												<span class="icon-chat-circle"></span>
 											</div>
 											<div class="text-box">
-												<p>You may send an email</p>
-												<h4><a href="mailto:info@example.com">info@example.com</a></h4>
+												<p>Email</p>
+												<h4><a href="mailto:<?= esc($siteEmail) ?>"><?= esc($siteEmail) ?></a></h4>
 											</div>
 										</div>
 									</li>
@@ -106,8 +115,8 @@ $siteIcon = app_setting_asset('site_icon', 'assets/images/favicons/favicon-32x32
 												<span class="icon-phone-call"></span>
 											</div>
 											<div class="text-box">
-												<p>Helpline and support</p>
-												<h4><a href="tel:8857002451">88 57 00 24 51</a></h4>
+												<p>Telepon / WhatsApp</p>
+												<h4><a href="tel:<?= preg_replace('/\D+/', '', $sitePhone) ?>"><?= esc($sitePhone) ?></a></h4>
 											</div>
 										</div>
 									</li>
@@ -117,10 +126,10 @@ $siteIcon = app_setting_asset('site_icon', 'assets/images/favicons/favicon-32x32
 						<div class="main-header-one__top-right">
 							<div class="main-header-one__top-right-inner">
 								<div class="text-box">
-									<h3>You can make a difference today!</h3>
+									<h3><?= esc(app_setting('header_cta_text', 'Jadwalkan kunjungan ke gereja')) ?></h3>
 								</div>
 								<div class="btn-box">
-									<a href="<?= base_url('donation.html') ?>">Donation</a>
+									<a href="<?= base_url(app_setting('header_cta_link', 'contact')) ?>"><?= esc(app_setting('header_cta_button', 'Hubungi Kami')) ?></a>
 								</div>
 							</div>
 						</div>
@@ -142,54 +151,45 @@ $siteIcon = app_setting_asset('site_icon', 'assets/images/favicons/favicon-32x32
 												<li class="dropdown current">
 													<a href="<?= base_url() ?>">Home</a>
 												</li>
-												<li><a href="<?= base_url('about.html') ?>">About</a></li>
 												<li class="dropdown">
-													<a href="#">Donations</a>
+													<a href="#">Profil</a>
 													<ul>
-														<li><a href="<?= base_url('donation.html') ?>">Donation</a></li>
-														<li><a href="<?= base_url('donation-list.html') ?>">Donation List</a></li>
-														<li><a href="<?= base_url('donation-single.html') ?>">Donation Details</a></li>
+														<li><a href="<?= base_url('about') ?>">Tentang Kami</a></li>
+														<li><a href="<?= base_url('majelis') ?>">Struktur Majelis</a></li>
+														<li><a href="<?= base_url('contact') ?>">Kontak</a></li>
 													</ul>
 												</li>
 												<li class="dropdown">
-													<a href="#">Events</a>
+													<a href="#">Berita</a>
 													<ul>
-														<li><a href="<?= base_url('events.html') ?>">Events</a></li>
-														<li><a href="<?= base_url('events-single.html') ?>">Events Details</a></li>
+														<li><a href="<?= base_url('news') ?>">Berita &amp; Renungan</a></li>
+														<li><a href="<?= base_url('events') ?>">Agenda Kegiatan</a></li>
 													</ul>
 												</li>
 												<li class="dropdown">
-													<a href="#">Pages</a>
+													<a href="#">Galeri</a>
 													<ul>
-														<li><a href="<?= base_url('volunteers.html') ?>">Volunteers 01</a></li>
-														<li><a href="<?= base_url('become-volunteer.html') ?>">Volunteer 02</a></li>
-														<li><a href="<?= base_url('portfolio.html') ?>">Portfolio</a></li>
-														<li><a href="<?= base_url('faq.html') ?>">Faq</a></li>
-														<li><a href="<?= base_url('shop.html') ?>">Shop</a></li>
-														<li><a href="<?= base_url('shop-details.html') ?>">Shop Details</a></li>
-														<li><a href="<?= base_url('cart.html') ?>">Cart</a></li>
-														<li><a href="<?= base_url('checkout.html') ?>">Checkout</a></li>
-														<li><a href="<?= base_url('404.html') ?>">404</a></li>
+														<li><a href="<?= base_url('gallery?type=photo') ?>">Foto</a></li>
+														<li><a href="<?= base_url('gallery?type=video') ?>">Video</a></li>
 													</ul>
 												</li>
+												<li><a href="<?= base_url('keuangan') ?>">Keuangan</a></li>
+												<li><a href="<?= base_url('umkm') ?>">UMKM Jemaat</a></li>
 												<li class="dropdown">
-													<a href="#">Blog</a>
+													<a href="#">Interaksi</a>
 													<ul>
-														<li><a href="<?= base_url('blog.html') ?>">Blog</a></li>
-														<li><a href="<?= base_url('blog-list.html') ?>">Blog List</a></li>
-														<li><a href="<?= base_url('blog-details.html') ?>">Blog Details</a></li>
+														<li><a href="<?= base_url('surveys') ?>">Survei Jemaat</a></li>
+														<li><a href="<?= base_url('feedback') ?>">Masukan &amp; Saran</a></li>
+														<li><a href="<?= base_url('guestbook') ?>">Buku Tamu</a></li>
 													</ul>
 												</li>
-												<li><a href="<?= base_url('contact.html') ?>">Contact</a></li>
+												<li><a href="<?= base_url('registration') ?>">Pendaftaran</a></li>
 											</ul>
 										</div>
 									</div>
 									<div class="main-header-one__bottom-right">
-										<div class="btn-box1">
-											<a href="<?= base_url('contact.html') ?>">Join us now </a>
-										</div>
 										<div class="btn-box2">
-											<a href="<?= base_url('volunteers.html') ?>">Become a Volunteer</a>
+											<a href="<?= base_url('registration') ?>">Pendaftaran</a>
 										</div>
 										<div class="header-search-box">
 											<a href="#" class="main-menu__search search-toggler icon-search"></a>
